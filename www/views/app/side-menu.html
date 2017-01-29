@@ -1,0 +1,63 @@
+<ion-side-menus enable-menu-with-back-views="false">
+  <ion-side-menu-content class="post-size-14px">
+    <ion-nav-bar class="bar app-top-bar">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+      <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+        </button>
+      </ion-nav-buttons>
+      <ion-nav-buttons side="right">
+        <button class="button button-icon button-clear ion-search" menu-toggle="right">
+        </button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-nav-view cache-view="false" name="menuContent"></ion-nav-view>
+  </ion-side-menu-content>
+
+  <ion-side-menu class="main-menu" side="left" width="230" style="background:url('img/splashscreen.png')!important;">
+    <ion-content>
+      <ion-list>
+        <ion-item class="heading-item item" nav-clear menu-close ui-sref="app.settings" style="color:white;">
+          <pre-img ratio="_1_1"><center>
+            <img style="border-radius:100px!important;" class="user-image" ng-src="{{user.avatar}}" spinner-on-load></center>
+          </pre-img>
+          <div class="heading-bg" style="background-color:none!important;">
+          </div>
+          <div class="heading-action item-icon-left">
+            <i class="icon ion-gear-a"></i>
+            <h2 class="greeting">SETTINGS</h2>
+          </div>
+        </ion-item>
+        <ion-item class="item item-icon-left" nav-clear menu-close ui-sref="app.contact" style="color:white;">
+          <i class="icon ion-beer"></i>
+          <h2 class="menu-text">BAR & PUB DEALS</h2>
+        </ion-item>
+        <ion-item class="item item-icon-left" nav-clear menu-close ui-sref="app.bars" style="color:white;">
+          <i class="icon ion-android-bar"></i>
+          <h2 class="menu-text">NIGHTCLUB DEALS</h2>
+        </ion-item>
+        <ion-item class="item item-icon-left" nav-clear menu-close ui-sref="app.page" style="color:white;">
+          <i class="icon ion-mic-b"></i>
+          <h2 class="menu-text">EVENT DEALS</h2>
+        </ion-item>
+        <ion-item class="item item-icon-left" nav-clear menu-close ui-sref="app.contact2" style="color:white;">
+          <i class="icon ion-card"></i>
+          <h2 class="menu-text">MY DARKCARD</h2>
+        </ion-item>
+          <ion-item class="item item-icon-left" nav-clear menu-close ui-sref="app.contact" style="color:white;">
+          <i class="icon ion-ios-telephone"></i>
+          <h2 class="menu-text">20% OFF TAXI</h2>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-side-menu>
+
+  <ion-side-menu class="multi-level-push-menu" side="right" ng-controller="PushMenuCtrl">
+    <ion-content has-bouncing="false" scroll="false">
+      <wp-search>
+      </wp-search>
+      <push-menu menu="menu"></push-menu>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>
