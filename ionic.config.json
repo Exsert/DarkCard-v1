@@ -1,14 +1,11 @@
 {
-  "name": "ionWordpress",
-  "app_id": "",
-  "gulpStartupTasks": [
-    "default",
-    "sass",
-    "watch"
-  ],
+  "name": "DarkApp",
+  "app_id": "f5126ced",
+  "type": "ionic1",
   "watchPatterns": [
-    "www/**/*",
-    "!www/lib/**/*"
+    "scss/**/*"
   ],
-  "documentRoot": "www"
+  "integrations": {
+    "cordova": {}
+  }
 }

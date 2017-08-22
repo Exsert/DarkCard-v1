@@ -13,21 +13,21 @@
       <div class="col">
         <form name="signup_form" class="" novalidate>
           <div class="list input-fields">
-            <label class="item item-input">
-              <span class="input-label">Username</span>
-              <input type="text" name="user_name" ng-model="user.userName" required>
+            <label class="item item-input no-border">
+              <i class="icon ion-person person-icon" style="margin-right:20px;"></i>
+              <input type="text" name="user_name" placeholder="Username" ng-model="user.userName" required>
             </label>
-            <label class="item item-input">
-              <span class="input-label">Name</span>
-              <input type="text" name="display_name" ng-model="user.displayName" required>
+            <label class="item item-input no-border">
+              <i class="icon ion-person person-icon" style="margin-right:20px;"></i>
+              <input type="text" name="display_name" placeholder="Name" ng-model="user.displayName" required>
             </label>
-            <label class="item item-input">
-              <span class="input-label">Email</span>
-              <input type="email" name="email" ng-model="user.email" required>
+            <label class="item item-input no-border">
+              <i class="icon ion-email email-icon" style="margin-right:20px;"></i>
+              <input type="email" name="email" placeholder="Email" ng-model="user.email" required>
             </label>
-            <label class="item item-input" show-hide-container>
-              <span class="input-label">Password</span>
-              <input type="password" name="password" ng-model="user.password" required show-hide-input>
+            <label class="item item-input no-border"> <!-- show-hide-container-->
+              <i class="icon ion-key key-icon" style="margin-right:20px;"></i>
+              <input type="password" name="password" placeholder="Password" ng-model="user.password" required> <!--show-hide-input-->
             </label>
             <button type="submit" class="register button button-block" ng-click="doRegister()" ng-disabled="signup_form.$invalid">
               Register

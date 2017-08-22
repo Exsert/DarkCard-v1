@@ -1,38 +1,49 @@
-<ion-view cache-view="false" class="login-view">
-  <ion-nav-bar class="view-navigation" style="background:#0F1316!important;border:none!important;">
+<ion-view class="login-view">
+  <ion-nav-bar class="view-navigation">
     <ion-nav-back-button>
     </ion-nav-back-button>
   </ion-nav-bar>
-  <ion-content class="padding" style="background:#15191E!important;">
+  <ion-content class="padding">
     <div class="row form-heading">
       <div class="col col-center">
-        <h1 class="form-title">Welcome back</h1>
+        <img src="../../img/diamond-logo-without-w-h.svg" />
       </div>
     </div>
-    <div class="row form-wrapper" style="background:#15191E!important;">
+    <div class="row form-wrapper">
       <div class="col">
-        <form name="login_form" class="" novalidate>
+        <form name="login_form" class="long-in-form" novalidate>
           <div class="list input-fields">
-            <label class="item item-input" style="background:#0F1316!important;border:none!important;">
-              <span class="input-label">Username</span>
-              <input type="text" name="user_name" ng-model="user.userName" required>
+            <label class="item item-input no-border">
+              <span class="input-label ion-person"></span>
+              <input type="text" name="user_name" placeholder="Username" ng-model="user.userName" required>
             </label>
-            <label class="item item-input" show-hide-container style="background:#0F1316!important;border:none!important;">
-              <span class="input-label">Password</span>
-              <input type="password" name="password" ng-model="user.password" required show-hide-input>
+            <label class="item item-input no-border" > <!--show-hide-container-->
+              <span class="input-label ion-key"></span>
+              <input type="password" name="password" placeholder="***********" ng-model="user.password" required > <!--show-hide-input-->
             </label>
-            <button type="submit" class="login button button-block" ng-click="doLogin()" ng-disabled="login_form.$invalid" style="background:#F4CF3F!important;">
+            <button type="submit" class="login button button-block" ng-click="doLogin()" ng-disabled="login_form.$invalid">
               Log in
             </button>
             <p ng-show="error" class="message error">{{error}}</p>
           </div>
         </form>
-        <div class="alternative-actions">
-          <a class="forgot-password button button-small button-clear" ui-sref="forgot_password">
-            Forgot Password?
+        <div class="other-actions-login" >
+          <a class="forgot-password button button-large button-clear" ui-sref="forgot_password">
+            FORGOT PASSWORD?
           </a>
-          <a class="sign-up button button-small button-clear" ui-sref="register">
-            Sign Up
+          <br />
+          <div class="button button-large button-clear">FIND US ON</div>
+          <div class="contact-details-item">
+            <div class="row social-networks" dynamic-anchor-fix>
+              <div class="col"><a href="http://twitter.com"><i class="icon ion-social-twitter twitter-icon" style="color:#37b9e1; font-size:20px;"></i></a></div>
+              <div class="col"><a href="http://facebook.com"><i class="icon ion-social-facebook facebook-icon" style="color:#3e649e; font-size:20px;"></i></a></div>
+              <div class="col"><a href="http://dribbble.com"><i class="icon ion-social-googleplus googleplus-icon" style="color:#c6484a; font-size:20px;"></i></a></div>
+            </div>
+          </div>
+          <br/>
+          <hr />
+          <a class="sign-up button button-large button-clear" ui-sref="register">
+            REGISTER FOR FREE
           </a>
         </div>
       </div>

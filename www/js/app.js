@@ -12,7 +12,7 @@ angular.module('your_app_name', [
   'ionic',
   'your_app_name.directives',
   'your_app_name.controllers',
-  'your_app_name.views',
+  //'your_app_name.views',
   'your_app_name.services',
   'your_app_name.config',
   'your_app_name.factories',
@@ -39,7 +39,7 @@ angular.module('your_app_name', [
       }
       else
       {
-        $state.go('walkthrough');
+        $state.go('login');
       }
     });
 
@@ -130,7 +130,7 @@ angular.module('your_app_name', [
     {
       if(response === false)
       {
-        $state.go('walkthrough');
+        $state.go('login');
       }else{
         //update user avatar and go on
         AuthService.updateUserAvatar();
@@ -148,7 +148,7 @@ angular.module('your_app_name', [
         if(response === false)
         {
           event.preventDefault();
-          $state.go('walkthrough');
+          $state.go('login');
         }
       });
     }
@@ -239,48 +239,9 @@ angular.module('your_app_name', [
       authenticate: true
     }
   })
-  
-    .state('app.bars', {
-    url: "/contact",
-    views: {
-      'menuContent': {
-        templateUrl: "views/app/barsandpubs.html",
-        controller: 'ContactCtrl'
-      }
-    },
-    data: {
-      authenticate: true
-    }
-  })
-  
-      .state('app.clubs', {
-    url: "/contact",
-    views: {
-      'menuContent': {
-        templateUrl: "views/app/nightclubsx.html",
-        controller: 'ContactCtrl'
-      }
-    },
-    data: {
-      authenticate: true
-    }
-  })
-  
-        .state('app.contact2', {
-    url: "/contact2",
-    views: {
-      'menuContent': {
-        templateUrl: "views/app/contact2save.html",
-        controller: 'ContactCtrl'
-      }
-    },
-    data: {
-      authenticate: true
-    }
-  })
 
   .state('app.post', {
-    url: "/post/:postId",
+    url: "/post/:postURL",
     views: {
       'menuContent': {
         templateUrl: "views/app/wordpress/post.html",
@@ -296,9 +257,22 @@ angular.module('your_app_name', [
       		template: 'Loading post ...'
       	});
 
-        var postId = $stateParams.postId;
-        return PostService.getPost(postId);
+        var postURL = $stateParams.postURL;
+        return PostService.getPost(postURL);
       }
+    }
+  })
+
+  .state('app.tickets', {
+    url: "/tickets",
+    views: {
+      'menuContent': {
+        templateUrl: "views/app/wordpress/tickets.html",
+        controller: 'TicketsCtrl'
+      }
+    },
+    data: {
+      authenticate: true
     }
   })
 
@@ -342,12 +316,25 @@ angular.module('your_app_name', [
     resolve: {
       page_data: function(PostService) {
         //You should replace this with your page slug
-        var page_slug = 'nightclub-deals-4';
+        var page_slug = 'wordpress-page';
         return PostService.getWordpressPage(page_slug);
       }
     }
   })
 
+  .state('app.map', {
+    url: "/map",
+    views: {
+      'menuContent': {
+        templateUrl: "views/app/map.html",
+        controller: 'MapCtrl'
+      }
+    },
+    data: {
+      authenticate: false
+    }
+  })
+  
 ;
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/home');

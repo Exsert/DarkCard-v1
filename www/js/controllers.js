@@ -1,4 +1,4 @@
-angular.module('your_app_name.controllers', [])
+angular.module('your_app_name.controllers', ['ionic', 'ngMap'])
 
 // APP - RIGHT MENU
 .controller('AppCtrl', function($scope, AuthService) {
@@ -72,13 +72,48 @@ angular.module('your_app_name.controllers', [])
 
   //map
   $scope.position = {
-    lat: 43.07493,
-    lng: -89.381388
+    lat: 51.454513,
+    lng: -2.587910
   };
 
   $scope.$on('mapInitialized', function(event, map) {
     $scope.map = map;
   });
+})
+
+// MAP
+.controller('MapCtrl', function($scope,$ionicLoading) {
+  //map
+  $scope.position = {
+    lat: 51.454513,
+    lng: -2.587910
+  };
+
+  $scope.$on('mapInitialized', function(event, map) {
+    $scope.map = map;
+  });
+  
+  $scope.centerOnMe= function(){
+    $scope.positions = [];
+      
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
+
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      $scope.positions.push({lat: pos.k,lng: pos.B});
+      console.log(pos);
+      $scope.map.setCenter(pos);
+      $ionicLoading.hide();
+      $scope.position = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+    });
+
+  };
 })
 
 // SETTINGS
@@ -437,52 +472,55 @@ angular.module('your_app_name.controllers', [])
 // POST
 .controller('PostCtrl', function($scope, post_data, $ionicLoading, PostService, AuthService, $ionicScrollDelegate) {
   $scope.post = post_data.post;
-  $scope.comments = _.map(post_data.post.comments, function(comment){
-    if(comment.author){
-      PostService.getUserGravatar(comment.author.id)
-      .then(function(avatar){
-        comment.user_gravatar = avatar;
-      });
-      return comment;
-    }else{
-      return comment;
-    }
-  });
+  
   $ionicLoading.hide();
 
-  $scope.sharePost = function(link){
-    window.plugins.socialsharing.share('Check this post here: ', null, null, link);
-  };
-
-  $scope.addComment = function(){
-
-    $ionicLoading.show({
-      template: 'Submiting comment...'
-    });
-
-    PostService.submitComment($scope.post.id, $scope.new_comment)
-    .then(function(data){
-      if(data.status=="ok"){
-        var user = AuthService.getUser();
-
-        var comment = {
-          author: {name: user.data.username},
-          content:$scope.new_comment,
-          date: Date.now(),
-          user_gravatar : user.avatar,
-          id: data.comment_id
-        };
-        $scope.comments.push(comment);
-        $scope.new_comment = "";
-        $scope.new_comment_id = data.comment_id;
-        $ionicLoading.hide();
-        // Scroll to new post
-        $ionicScrollDelegate.scrollBottom(true);
-      }
-    });
-  };
 })
 
+// Tickets
+.controller('TicketsCtrl', function($scope, $rootScope, $state, $ionicLoading, PostService) {
+  $scope.posts = [];
+  $scope.page = 1;
+  $scope.totalPages = 1;
+
+  $scope.doRefresh = function() {
+    $ionicLoading.show({
+      template: 'Loading tickets...'
+    });
+
+    //Always bring me the latest tickets => page=1
+    PostService.getPostTickets()
+    .then(function(data){
+
+      $scope.totalPages = data.pages;
+      $scope.posts = PostService.shortenPosts(data.posts);
+
+      $ionicLoading.hide();
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+  };
+
+  $scope.loadMoreData = function(){
+    $scope.page += 1;
+
+    PostService.getRecentPosts($scope.page)
+    .then(function(data){
+      //We will update this value in every request because new posts can be created
+      $scope.totalPages = data.pages;
+      var new_posts = PostService.shortenPosts(data.posts);
+      $scope.posts = $scope.posts.concat(new_posts);
+
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  };
+
+  $scope.moreDataCanBeLoaded = function(){
+    return $scope.totalPages > $scope.page;
+  };
+
+  $scope.doRefresh();
+
+})
 
 // CATEGORY
 .controller('PostCategoryCtrl', function($scope, $rootScope, $state, $ionicLoading, $stateParams, PostService) {
@@ -544,6 +582,110 @@ angular.module('your_app_name.controllers', [])
 // WP PAGE
 .controller('PageCtrl', function($scope, page_data) {
   $scope.page = page_data.page;
+})
+
+
+.controller('WelcomeCtrl', function($scope, $state, $q, UserService, $ionicLoading) {
+  // This is the success callback from the login method
+  var fbLoginSuccess = function(response) {
+    if (!response.authResponse){
+      fbLoginError("Cannot find the authResponse");
+      return;
+    }
+
+    var authResponse = response.authResponse;
+
+    getFacebookProfileInfo(authResponse)
+    .then(function(profileInfo) {
+      // For the purpose of this example I will store user data on local storage
+      UserService.setUser({
+        authResponse: authResponse,
+				userID: profileInfo.id,
+				name: profileInfo.name,
+				email: profileInfo.email,
+        picture : "http://graph.facebook.com/" + authResponse.userID + "/picture?type=large"
+      });
+      $ionicLoading.hide();
+      $state.go('app.home');
+    }, function(fail){
+      // Fail get profile info
+      console.log('profile info fail', fail);
+    });
+  };
+
+  // This is the fail callback from the login method
+  var fbLoginError = function(error){
+    console.log('fbLoginError', error);
+    $ionicLoading.hide();
+  };
+
+  // This method is to get the user profile info from the facebook api
+  var getFacebookProfileInfo = function (authResponse) {
+    var info = $q.defer();
+
+    facebookConnectPlugin.api('/me?fields=email,name&access_token=' + authResponse.accessToken, null,
+      function (response) {
+				console.log(response);
+        info.resolve(response);
+      },
+      function (response) {
+				console.log(response);
+        info.reject(response);
+      }
+    );
+    return info.promise;
+  };
+
+  //This method is executed when the user press the "Login with facebook" button
+  $scope.facebookSignIn = function() {
+    facebookConnectPlugin.getLoginStatus(function(success){
+      if(success.status === 'connected'){
+        // The user is logged in and has authenticated your app, and response.authResponse supplies
+        // the user's ID, a valid access token, a signed request, and the time the access token
+        // and signed request each expire
+        console.log('getLoginStatus', success.status);
+
+    		// Check if we have our user saved
+    		var user = UserService.getUser('facebook');
+
+    		if(!user.userID){
+					getFacebookProfileInfo(success.authResponse)
+					.then(function(profileInfo) {
+						// For the purpose of this example I will store user data on local storage
+						UserService.setUser({
+							authResponse: success.authResponse,
+							userID: profileInfo.id,
+							name: profileInfo.name,
+							email: profileInfo.email,
+							picture : "http://graph.facebook.com/" + success.authResponse.userID + "/picture?type=large"
+						});
+
+						$state.go('app.home');
+					}, function(fail){
+						// Fail get profile info
+						console.log('profile info fail', fail);
+					});
+				}else{
+					$state.go('app.home');
+				}
+      } else {
+        // If (success.status === 'not_authorized') the user is logged in to Facebook,
+				// but has not authenticated your app
+        // Else the person is not logged into Facebook,
+				// so we're not sure if they are logged into this app or not.
+
+				console.log('getLoginStatus', success.status);
+
+				$ionicLoading.show({
+          template: 'Logging in...'
+        });
+
+				// Ask the permissions you need. You can learn more about
+				// FB permissions here: https://developers.facebook.com/docs/facebook-login/permissions/v2.4
+        facebookConnectPlugin.login(['email', 'public_profile'], fbLoginSuccess, fbLoginError);
+      }
+    });
+  };
 })
 
 ;

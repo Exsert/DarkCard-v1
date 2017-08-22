@@ -1,5 +1,5 @@
 {
-  "name": "ionwordpress",
+  "name": "DarkApp",
   "private": "true",
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.2.4"
@@ -10,7 +10,6 @@
     "angular-moment": "~0.10.1",
     "bourbon": "~4.2.3",
     "angular-youtube-mb": "~1.1.0",
-    "ngCordova": "^0.1.27-alpha",
-    "angular-cache-buster": "^0.4.3"
+    "ngCordova": "^0.1.27-alpha"
   }
 }

@@ -7,8 +7,9 @@ angular.module('your_app_name.services', [])
     var deferred = $q.defer();
 
     $http.jsonp(WORDPRESS_API_URL +
-      'get_recent_posts/' +
-      '?page='+ page +
+      'get_posts/' +
+      '?post_type=tribe_events' +
+      '&page='+ page +
       '&insecure=cool' +
       '&callback=JSON_CALLBACK')
     .success(function(data) {
@@ -30,8 +31,8 @@ angular.module('your_app_name.services', [])
     '&insecure=cool' +
     '&callback=JSON_CALLBACK')
     .success(function(data) {
-      var avatar_aux = data.avatar.replace("https:", "");
-      var avatar = 'https:' + avatar_aux;
+      var avatar_aux = data.avatar.replace("http:", "");
+      var avatar = 'http:' + avatar_aux;
 
       deferred.resolve(avatar);
     })
@@ -42,11 +43,30 @@ angular.module('your_app_name.services', [])
     return deferred.promise;
   };
 
-  this.getPost = function(postId) {
+  this.getPost = function(postURL) {
     var deferred = $q.defer();
 
-    $http.jsonp(WORDPRESS_API_URL + 'get_post/' +
-      '?post_id='+ postId +
+    $http.jsonp(postURL + '/?json=1' +
+    '&type=full' +
+    '&insecure=cool' +
+    '&callback=JSON_CALLBACK')
+    .success(function(data) {
+      deferred.resolve(data);
+    })
+    .error(function(data) {
+      deferred.reject(data);
+    });
+
+    return deferred.promise;
+  };
+
+  // tickets
+  this.getPostTickets = function() {
+    var deferred = $q.defer();
+
+    $http.jsonp(WORDPRESS_API_URL +
+      'get_posts/' +
+      '?post_type=tribe_rsvp_tickets' +
       '&insecure=cool' +
       '&callback=JSON_CALLBACK')
     .success(function(data) {
@@ -58,7 +78,7 @@ angular.module('your_app_name.services', [])
 
     return deferred.promise;
   };
-
+  
   this.submitComment = function(postId, content) {
     var deferred = $q.defer(),
         user = AuthService.getUser();
@@ -535,8 +555,8 @@ angular.module('your_app_name.services', [])
     '&callback=JSON_CALLBACK')
     .success(function(data) {
 
-      var avatar_aux = data.avatar.replace("https:", "");
-      var avatar = 'https:' + avatar_aux;
+      var avatar_aux = data.avatar.replace("http:", "");
+      var avatar = 'http:' + avatar_aux;
 
       window.localStorage.ionWordpress_user_avatar =  JSON.stringify(avatar);
 

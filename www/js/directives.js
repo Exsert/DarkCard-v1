@@ -336,6 +336,11 @@ angular.module('your_app_name.directives', [])
 	};
 })
 
+.directive('ticketCard', function() {
+	return {
+		templateUrl: 'views/app/wordpress/ticket-card.html'
+	};
+})
 
 .directive('showHideContainer', function(){
 	return {

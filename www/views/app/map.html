@@ -1,0 +1,22 @@
+<ion-view class="contact-view">
+  <ion-nav-title>
+    <span>MAP</span>
+  </ion-nav-title>
+  <ion-content>
+    <div class="row map-options" dynamic-anchor-fix>
+      <div class="col map-options-item">CLUBS</div>
+      <div class="col map-options-item">BARS</div>
+      <div class="col map-options-item">FOOD</div>
+      <div class="col"><button class="center-me-btn" ng-click="centerOnMe()"><i class="icon ion-location location-icon" style="color:#ffffff; font-size:15px;"></i></button></div>
+    </div>
+    <div>
+      <map id="map" center="{{position.lat}},{{position.lng}}" zoom="15" style="height:88vmax; max-height:100%;" styles="[{'featureType':'all','elementType':'all','stylers':[{'invert_lightness':true},{'saturation':10},{'lightness':30},{'gamma':0.5},{'hue':'#435158'}]}]">
+        <marker
+          position="{{position.lat}},{{position.lng}}"
+          title="Marker"
+          visible="true">
+        </marker>
+      </map>
+    </div>
+  </ion-content>
+</ion-view>
